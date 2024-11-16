@@ -30,6 +30,9 @@ export default function RootLayout({
         variables: {
           colorPrimary: "#65a765",
         },
+        layout: {
+          unsafe_disableDevelopmentModeWarnings: true,
+        },
       }}
     >
       <html lang="en">
