@@ -38,6 +38,7 @@ export function HistoryCarousel({
   currentIndex,
   onDayChange,
 }: HistoryCarouselProps) {
+  console.log(data);
   const days = Object.keys(data);
   const currentDay = days[currentIndex];
   const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URL;

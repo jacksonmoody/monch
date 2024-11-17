@@ -51,6 +51,18 @@ export default function WeeklyChart({
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
+      {
+        label: "Calories",
+        data: days.map((day) => {
+          return historyData[day]?.reduce(
+            (total, item) => total + item.calories,
+            0
+          );
+        }),
+        fill: false,
+        borderColor: "rgb(255, 205, 86)",
+        tension: 0.1,
+      },
     ],
   };
 
