@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 
-export default function FileUpload() {
+export default function FileUpload({ userId }: { userId: string }) {
   const [uploading, setUploading] = useState(false);
 
   const uploadFile = async (file: File | undefined) => {
@@ -16,6 +16,7 @@ export default function FileUpload() {
       setUploading(true);
       const data = new FormData();
       data.set("file", file);
+      data.set("userId", userId);
       const uploadRequest = await fetch("/api/files", {
         method: "POST",
         body: data,
@@ -42,8 +43,12 @@ export default function FileUpload() {
         accept="image/*"
         hidden
       />
-      <label htmlFor="upload" className="cursor-pointer w-full h-full">
-        <Button size="lg" disabled={uploading} className="pointer-events-none">
+      <label htmlFor="upload" className="cursor-pointer h-full">
+        <Button
+          size="lg"
+          disabled={uploading}
+          className="pointer-events-none text-white text-2xl font-bold py-2"
+        >
           {uploading ? "Processing..." : "Add New Meal"}
         </Button>
       </label>

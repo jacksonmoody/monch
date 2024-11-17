@@ -11,19 +11,34 @@ import { SignOutButton } from "@clerk/nextjs";
 import { pinata } from "@/lib/config";
 import FileUpload from "@/components/FileUpload";
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { HistoryCarousel } from "../components/historyData";
 
-const getHistory = async () => {
-  
+
+const getHistory = async (userId : string) => {
+
   try {
-    const listedFilesByGroup = await pinata.listFiles().group("1234");
-    const historyFile = listedFilesByGroup.find((f) => f.metadata.name === "history.json")?.ipfs_pin_hash;
+    console.log("Getting history");
+    const response = await pinata.gateways.get("QmWtZSM1bGbpc1MWpN2ZSZFR4Cr9CemSmbqymyRDRb1Nby");
+    const { data } = response;
+    return NextResponse.json(data);
 
-    if (!historyFile) {
-      return NextResponse.json({ error: "History file not found" }, { status: 404 });
-    }
+    // const listedFilesByGroup = await pinata.listFiles().group(userId);
+    // const historyFile = listedFilesByGroup.find((f) => f.metadata.name === "history.json")?.ipfs_pin_hash;
 
-    const files = await pinata.listFiles();
-    return NextResponse.json(files);
+    // if (!historyFile) {
+    //   return NextResponse.json({ error: "History file not found" }, { status: 404 });
+    // }
+
+    // const files = await pinata.gateways.get(historyFile);
+    // console.log(files);
+    // return NextResponse.json(files);
   } catch (e) {
     console.error("API Error:", e);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -34,18 +49,20 @@ export default async function Page() {
   const { userId } = await auth();
   const user = await currentUser();
 
-
-  const date = new Date().toISOString().substring(0,10);
-  console.log(date);
-
-  console.log("Fetching history from /api/files");
-  const myHistory = await getHistory();
-  console.log("Fetched history:", myHistory);
-
-
   if (!userId || !user) {
     return redirect("/landing");
   }
+
+  const myHistory = await getHistory(userId);
+  const historyData = await myHistory.json();
+
+
+
+
+  // console.log(myHistory);
+
+  // const date = new Date().toISOString().substring(0,10);
+  // console.log(date);
 
   return (
     <>
@@ -82,11 +99,14 @@ export default async function Page() {
           <div className="col-span-4">
             <MacrosCard type="fat" value={30} unit="g" />
           </div>
-          <div className="col-span-12">
-            <HistoryTable />
+          <div className="col-span-12 flex w-full justify-center">
+
+          <div className="col-span-12 flex w-full justify-center">
+            {myHistory && <HistoryCarousel data={historyData} />}
           </div>
-          <div className="col-span-12">
-            <FileUpload />
+          </div>
+          <div className="col-span-12 flex w-full justify-center">
+            <FileUpload userId={userId} />
           </div>
         </div>
       </main>

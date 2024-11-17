@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-type MacroType = "protein" | "carbs" | "fat";
+type MacroType = "protein" | "carbs" | "fat" | "calories";
 
 interface MacrosCardProps {
   type: MacroType;
@@ -28,6 +28,11 @@ export const MacrosCard = ({
         title: "Fat",
         color: "text-yellow-600",
       },
+      calories: {
+        title: "Calories",
+        color: "text-red-600",
+      },
+
     };
     return info[type];
   };
