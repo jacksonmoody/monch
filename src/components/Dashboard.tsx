@@ -15,14 +15,13 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ historyData, goalsData }: DashboardProps) {
-  const days = Object.keys(historyData);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-
-  const currentDay = days[currentIndex];
   if (!historyData || !goalsData) {
     return null;
   }
+  const days = Object.keys(historyData);
+  const currentDay = days[currentIndex];
+
 
   // Calculate total macros for the selected day
     const totalMacros =

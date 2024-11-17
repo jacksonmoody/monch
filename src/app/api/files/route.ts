@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { pinata } from "@/lib/config";
+import { helper_post } from "@/lib/helper";
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,6 +26,8 @@ export async function POST(request: NextRequest) {
       groupId: groupId,
       cids: [uploadedFile.IpfsHash],
     });
+
+    await helper_post(userId ,uploadedFile.IpfsHash);
 
     return NextResponse.json({ status: 200 });
   } catch (e) {
