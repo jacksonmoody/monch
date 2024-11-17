@@ -28,6 +28,8 @@ export const MacrosCard = ({ type, value = 0, unit = 'g' }: MacrosCardProps) => 
     return info[type];
   };
 
+
+
   const macroInfo = getMacroInfo(type);
 
   return (

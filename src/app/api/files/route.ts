@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { pinata } from "@/utils/config";
+import { env } from "process";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,5 +14,21 @@ export async function POST(request: NextRequest) {
       { error: "Internal Server Error" },
       { status: 500 }
     );
+  }
+}
+
+
+export async function GET() {
+  try {
+      const file = await pinata.listFiles().name("history.json");
+
+      const data = await pinata.gateways.get(file[0].ipfs_pin_hash);
+      return NextResponse.json(data);
+  } catch (e) {
+      console.error("API Error:", e);
+      return NextResponse.json(
+          { error: "Internal Server Error" },
+          { status: 500 }
+      );
   }
 }
