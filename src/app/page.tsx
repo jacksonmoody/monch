@@ -1,7 +1,6 @@
 "use server";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import HistoryTable from "@/components/HistoryTable";
 import { MacrosCard } from "@/components/MacrosCard";
 import Image from "next/image";
 import avocado from "@/app/images/avocado.png";
@@ -10,38 +9,28 @@ import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@clerk/nextjs";
 import { pinata } from "@/lib/config";
 import FileUpload from "@/components/FileUpload";
-import { NextResponse, type NextRequest } from "next/server";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { HistoryCarousel } from "../components/historyData";
+import { HistoryCarousel, type HistoryData } from "../components/historyData";
 
-
-const getHistory = async (userId : string) => {
-
+const getFile = async (userId: string, filename: string) => {
   try {
-    console.log("Getting history");
-    const response = await pinata.gateways.get("QmWtZSM1bGbpc1MWpN2ZSZFR4Cr9CemSmbqymyRDRb1Nby");
-    const { data } = response;
-    return NextResponse.json(data);
-
-    // const listedFilesByGroup = await pinata.listFiles().group(userId);
-    // const historyFile = listedFilesByGroup.find((f) => f.metadata.name === "history.json")?.ipfs_pin_hash;
-
-    // if (!historyFile) {
-    //   return NextResponse.json({ error: "History file not found" }, { status: 404 });
-    // }
-
-    // const files = await pinata.gateways.get(historyFile);
-    // console.log(files);
-    // return NextResponse.json(files);
+    const groupForUser = await pinata.groups.list().name(userId);
+    if (groupForUser.length === 0) {
+      return null;
+    }
+    const listedFilesByGroup = await pinata
+      .listFiles()
+      .group(groupForUser[0].id);
+    const file = listedFilesByGroup.find(
+      (f) => f.metadata.name === filename
+    )?.ipfs_pin_hash;
+    if (!file) {
+      return null;
+    } else {
+      const returnFile = await pinata.gateways.get(file);
+      return returnFile;
+    }
   } catch (e) {
     console.error("API Error:", e);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 };
 
@@ -53,19 +42,14 @@ export default async function Page() {
     return redirect("/landing");
   }
 
-  const myHistory = await getHistory(userId);
-  const historyData = await myHistory.json();
-
-
-
-
-  // console.log(myHistory);
-
-  // const date = new Date().toISOString().substring(0,10);
-  // console.log(date);
   if (!user.publicMetadata?.isOnboarded) {
     return redirect("/onboarding");
   }
+
+  const historyData = (await getFile(
+    userId,
+    "history.json"
+  )) as unknown as HistoryData;
 
   return (
     <>
@@ -103,10 +87,9 @@ export default async function Page() {
             <MacrosCard type="fat" value={30} unit="g" />
           </div>
           <div className="col-span-12 flex w-full justify-center">
-
-          <div className="col-span-12 flex w-full justify-center">
-            {myHistory && <HistoryCarousel data={historyData} />}
-          </div>
+            <div className="col-span-12 flex w-full justify-center">
+              {historyData && <HistoryCarousel data={historyData} />}
+            </div>
           </div>
           <div className="col-span-12 flex w-full justify-center">
             <FileUpload userId={userId} />

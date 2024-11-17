@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React from "react";
 import {
   Carousel,
   CarouselContent,
@@ -16,7 +16,7 @@ interface FoodItem {
   fat: number;
 }
 
-interface HistoryData {
+export interface HistoryData {
   [key: string]: FoodItem[];
 }
 
@@ -38,15 +38,21 @@ export function HistoryCarousel({ data }: { data: HistoryData }) {
                       <h3 className="font-semibold text-xl">{item.name}</h3>
                       <div className="grid grid-cols-3 gap-6 text-base">
                         <div className="flex flex-col items-center p-2 bg-blue-50 rounded-lg">
-                          <span className="font-medium text-blue-600">Protein</span>
+                          <span className="font-medium text-blue-600">
+                            Protein
+                          </span>
                           <span>{item.protein}g</span>
                         </div>
                         <div className="flex flex-col items-center p-2 bg-green-50 rounded-lg">
-                          <span className="font-medium text-green-600">Carbs</span>
+                          <span className="font-medium text-green-600">
+                            Carbs
+                          </span>
                           <span>{item.carbs}g</span>
                         </div>
                         <div className="flex flex-col items-center p-2 bg-yellow-50 rounded-lg">
-                          <span className="font-medium text-yellow-600">Fat</span>
+                          <span className="font-medium text-yellow-600">
+                            Fat
+                          </span>
                           <span>{item.fat}g</span>
                         </div>
                       </div>
