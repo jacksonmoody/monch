@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import {
   Carousel,
   CarouselContent,
@@ -17,7 +16,7 @@ interface FoodItem {
   fat: number;
 }
 
-interface HistoryData {
+export interface HistoryData {
   [key: string]: FoodItem[];
 }
 

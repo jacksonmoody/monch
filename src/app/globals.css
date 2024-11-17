@@ -9,6 +9,11 @@
   --secondary: #8b4513;
   --light: #f7fee7;
   --dark: #3f721d;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 215 20.2% 65.1%;
+  --radius: 0.5rem;
 }
 
 body {

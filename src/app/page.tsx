@@ -1,7 +1,6 @@
 "use server";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import HistoryTable from "@/components/HistoryTable";
 import { MacrosCard } from "@/components/MacrosCard";
 import Image from "next/image";
 import avocado from "@/app/images/avocado.png";
@@ -11,21 +10,29 @@ import { SignOutButton } from "@clerk/nextjs";
 import { pinata } from "@/lib/config";
 import FileUpload from "@/components/FileUpload";
 import { NextResponse, type NextRequest } from "next/server";
-import { HistoryCarousel } from "../components/historyData";
+import { HistoryCarousel, type HistoryData } from "../components/historyData";
 import  Dashboard  from "../components/Dashboard";
 
-
-const getHistory = async (userId : string) => {
-
+const getFile = async (userId: string, filename: string) => {
   try {
-    console.log("Getting history");
-    console.log(userId);
-    const response = await pinata.gateways.get("QmWtZSM1bGbpc1MWpN2ZSZFR4Cr9CemSmbqymyRDRb1Nby");
-    const { data } = response;
-    return NextResponse.json(data);
+    const groupForUser = await pinata.groups.list().name(userId);
+    if (groupForUser.length === 0) {
+      return null;
+    }
+    const listedFilesByGroup = await pinata
+      .listFiles()
+      .group(groupForUser[0].id);
+    const file = listedFilesByGroup.find(
+      (f) => f.metadata.name === filename
+    )?.ipfs_pin_hash;
+    if (!file) {
+      return null;
+    } else {
+      const returnFile = await pinata.gateways.get(file);
+      return returnFile.data;
+    }
   } catch (e) {
     console.error("API Error:", e);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 };
 
@@ -37,8 +44,14 @@ export default async function Page() {
     return redirect("/landing");
   }
 
-  const myHistory = await getHistory(userId);
-  const historyData = await myHistory.json();
+  if (!user.publicMetadata?.isOnboarded) {
+    return redirect("/onboarding");
+  }
+
+  const historyData = (await getFile(
+    userId,
+    "history.json"
+  )) as unknown as HistoryData;
 
   return (
     <>
@@ -71,10 +84,6 @@ export default async function Page() {
   <div className="w-full max-w-6xl mb-6">
     <Dashboard historyData={historyData} />
   </div>
-
-  {/* File Upload Section
-  if you fuck this up it will change the format
-  */}
   <div className="w-full max-w-6xl flex justify-center">
     <FileUpload userId={userId} />
   </div>
