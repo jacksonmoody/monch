@@ -27,7 +27,7 @@ const getFile = async (userId: string, filename: string) => {
       return null;
     } else {
       const returnFile = await pinata.gateways.get(file);
-      return returnFile;
+      return returnFile.data;
     }
   } catch (e) {
     console.error("API Error:", e);
@@ -96,8 +96,8 @@ export default async function Page() {
           </div>
         </div>
       </main>
-      <footer className="absolute bottom-0 w-full">
-        <p className="text-center text-gray-400 text-xs py-4">
+      <footer className="w-full">
+        <p className="text-center text-gray-400 text-xs pb-4 pt-8">
           Made by Pedro Garcia, Jackson Moody, Josh Zhang, and Josh Zhang
         </p>
       </footer>
