@@ -20,10 +20,14 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ historyData }: DashboardProps) {
-  const [selectedDay, setSelectedDay] = useState(Object.keys(historyData)[0]);
+  const days = Object.keys(historyData);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const currentDay = days[currentIndex];
+  console.log("Current index:", currentIndex, "Current day:", currentDay);
 
   // Calculate total macros for the selected day
-  const totalMacros = historyData[selectedDay]?.reduce(
+  const totalMacros = historyData[currentDay]?.reduce(
     (totals, item) => {
       totals.protein += item.protein;
       totals.carbs += item.carbs;
@@ -34,9 +38,10 @@ export default function Dashboard({ historyData }: DashboardProps) {
     { protein: 0, carbs: 0, fat: 0, calories: 0 }
   );
 
-  // Handler for day change
-  const handleDayChange = (day: string) => {
-    setSelectedDay(day);
+  // Handler for changing the day
+  const handleDayChange = (newIndex: number) => {
+    console.log("Changing to index:", newIndex);
+    setCurrentIndex(newIndex);
   };
 
   return (
@@ -55,7 +60,11 @@ export default function Dashboard({ historyData }: DashboardProps) {
       </div>
 
       <div className="col-span-12 flex w-full justify-center">
-        <HistoryCarousel data={historyData} onDayChange={handleDayChange} />
+        <HistoryCarousel
+          data={historyData}
+          currentIndex={currentIndex}
+          onDayChange={handleDayChange}
+        />
       </div>
     </div>
   );

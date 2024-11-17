@@ -1,14 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import avocado from "@/app/images/avocado.png";
+import { Button } from "@/components/ui/button";
 
 interface FoodItem {
   name: string;
@@ -24,40 +23,37 @@ interface HistoryData {
 
 interface HistoryCarouselProps {
   data: HistoryData;
-  onDayChange: (day: string) => void;
+  currentIndex: number;
+  onDayChange: (newIndex: number) => void;
 }
 
-export function HistoryCarousel({ data, onDayChange }: HistoryCarouselProps) {
-  // State to track the current selected day
-  const [currentDayIndex, setCurrentDayIndex] = useState(0);
+export function HistoryCarousel({ data, currentIndex, onDayChange }: HistoryCarouselProps) {
   const days = Object.keys(data);
+  const currentDay = days[currentIndex];
 
-  // Get the current day based on the index
-  const currentDay = days[currentDayIndex];
+  console.log("Rendering day:", currentDay, "with index:", currentIndex);
 
-  // Handler for navigating to the previous day
   const handlePrevious = () => {
-    const newIndex = (currentDayIndex - 1 + days.length) % days.length;
-    setCurrentDayIndex(newIndex);
-    onDayChange(days[newIndex]);
+    const newIndex = (currentIndex - 1 + days.length) % days.length;
+    console.log("Previous clicked, new index:", newIndex);
+    onDayChange(newIndex);
   };
 
-  // Handler for navigating to the next day
   const handleNext = () => {
-    const newIndex = (currentDayIndex + 1) % days.length;
-    setCurrentDayIndex(newIndex);
-    onDayChange(days[newIndex]);
+    const newIndex = (currentIndex + 1) % days.length;
+    console.log("Next clicked, new index:", newIndex);
+    onDayChange(newIndex);
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className="relative w-full max-w-lg mx-auto">
       <Carousel className="w-full relative">
         <CarouselContent>
           <CarouselItem key={currentDay}>
             <div className="w-full">
               <h2 className="text-2xl font-bold mb-6 text-center">{currentDay}</h2>
               <div className="space-y-4">
-                {data[currentDay].map((item, index) => (
+                {data[currentDay]?.map((item, index) => (
                   <div
                     key={`${currentDay}-${index}`}
                     className="bg-white rounded-lg shadow-md p-6"
@@ -66,7 +62,7 @@ export function HistoryCarousel({ data, onDayChange }: HistoryCarouselProps) {
                       <div className="flex-shrink-0 w-48">
                         <Image
                           src={avocado}
-                          alt="Avocado"
+                          alt={item.name}
                           width={800}
                           className="w-full h-auto"
                         />
@@ -75,22 +71,20 @@ export function HistoryCarousel({ data, onDayChange }: HistoryCarouselProps) {
                         <h3 className="text-xl font-bold mb-4">{item.name}</h3>
                         <div className="space-y-3">
                           <div className="flex items-center gap-2">
-                            <span className="text-blue-600 font-semibold text-lg">Protein:</span>
-                            <span className="text-lg">{item.protein}g</span>
+                            <span className="text-blue-600 font-semibold">Protein:</span>
+                            <span>{item.protein}g</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-green-600 font-semibold text-lg">Carbs:</span>
-                            <span className="text-lg">{item.carbs}g</span>
+                            <span className="text-green-600 font-semibold">Carbs:</span>
+                            <span>{item.carbs}g</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-yellow-600 font-semibold text-lg">Fats:</span>
-                            <span className="text-lg">{item.fat}g</span>
+                            <span className="text-yellow-600 font-semibold">Fats:</span>
+                            <span>{item.fat}g</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-red-600 font-semibold text-lg">Calories:</span>
-                            <span className="text-lg">
-                              {(item.protein * 4) + (item.carbs * 4) + (item.fat * 9)} kCal
-                            </span>
+                            <span className="text-red-600 font-semibold">Calories:</span>
+                            <span>{(item.protein * 4) + (item.carbs * 4) + (item.fat * 9)} kCal</span>
                           </div>
                         </div>
                       </div>
@@ -101,12 +95,37 @@ export function HistoryCarousel({ data, onDayChange }: HistoryCarouselProps) {
             </div>
           </CarouselItem>
         </CarouselContent>
-        <div className="absolute -left-4 top-1/2 -translate-y-1/2">
-          <CarouselPrevious onClick={handlePrevious} />
-        </div>
-        <div className="absolute -right-4 top-1/2 -translate-y-1/2">
-          <CarouselNext onClick={handleNext} />
-        </div>
+        <Button
+  onClick={handlePrevious}
+  className="absolute -left-12 top-1/2 -translate-y-1/2 bg-gray-200 p-3 rounded-full shadow-md"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth="2"
+    stroke="currentColor"
+    className="w-8 h-8 text-gray-800"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+  </svg>
+</Button>
+<Button
+  onClick={handleNext}
+  className="absolute -right-12 top-1/2 -translate-y-1/2 bg-gray-200 p-3 rounded-full shadow-md"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth="2"
+    stroke="currentColor"
+    className="w-8 h-8 text-gray-800"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+  </svg>
+</Button>
+
       </Carousel>
     </div>
   );

@@ -12,6 +12,7 @@ import { pinata } from "@/lib/config";
 import FileUpload from "@/components/FileUpload";
 import { NextResponse, type NextRequest } from "next/server";
 import { HistoryCarousel } from "../components/historyData";
+import  Dashboard  from "../components/Dashboard";
 
 
 const getHistory = async (userId : string) => {
@@ -63,40 +64,21 @@ export default async function Page() {
           <SignOutButton />
         </Button>
       </header>
+      <main className="flex flex-col items-center">
+  {/*
+  Dashboard Section - includes the macros cards and the history carousel
+  */}
+  <div className="w-full max-w-6xl mb-6">
+    <Dashboard historyData={historyData} />
+  </div>
 
-      <main className="flex justify-center">
-        <div>
-        <p className="">Todays Goals:</p>
-        </div>
-        <div className="grid grid-cols-12 gap-4 max-w-6xl">
-
-          <div className="col-span-3">
-
-            <MacrosCard type="protein" value={50} unit="g" />
-          </div>
-          <div className="col-span-3">
-            <MacrosCard type="carbs" value={150} unit="g" />
-          </div>
-          <div className="col-span-3">
-            <MacrosCard type="fat" value={30} unit="g" />
-          </div>
-          <div className="col-span-3">
-            <MacrosCard type="calories" value={30} unit="g" />
-          </div>
-
-          {/* dont remove*/}
-          <div className="col-span-12 flex w-full justify-center">
-
-          <div className="col-span-12 flex w-full justify-center">
-            {myHistory && <HistoryCarousel data={historyData} />}
-          </div>
-
-          </div>
-          <div className="col-span-12 flex w-full justify-center">
-            <FileUpload userId={userId} />
-          </div>
-        </div>
-      </main>
+  {/* File Upload Section
+  if you fuck this up it will change the format
+  */}
+  <div className="w-full max-w-6xl flex justify-center">
+    <FileUpload userId={userId} />
+  </div>
+</main>
       <footer className="absolute bottom-0 w-full">
         <p className="text-center text-gray-400 text-xs py-4">
           Made by Pedro Garcia, Jackson Moody, Josh Zhang, and Josh Zhang
