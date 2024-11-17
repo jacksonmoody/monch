@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { pinata } from "@/utils/config";
-import { env } from "process";
+import { pinata } from "@/lib/config";
 
 export async function POST(request: NextRequest) {
   try {
