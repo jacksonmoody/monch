@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { MacrosCard } from "@/components/MacrosCard";
+import { MacrosCard } from "../components/MacrosCard";
 import {
   type HistoryData,
   type GoalsData,
@@ -18,11 +18,11 @@ export default function Dashboard({ historyData, goalsData }: DashboardProps) {
   const days = Object.keys(historyData);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+
   const currentDay = days[currentIndex];
   if (!historyData || !goalsData) {
     return null;
   }
-
 
   // Calculate total macros for the selected day
     const totalMacros =

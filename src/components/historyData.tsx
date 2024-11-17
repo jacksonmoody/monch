@@ -6,8 +6,10 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import avocado from "@/app/images/avocado.png";
+import { pinata } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { titan } from "@/app/fonts";
+import { useEffect, useState } from "react";
 
 interface FoodItem {
   name: string;
@@ -42,6 +44,8 @@ export function HistoryCarousel({
 }: HistoryCarouselProps) {
   const days = Object.keys(data);
   const currentDay = days[currentIndex];
+  const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URL;
+
 
   const handlePrevious = () => {
     const newIndex = (currentIndex - 1 + days.length) % days.length;
@@ -52,6 +56,7 @@ export function HistoryCarousel({
     const newIndex = (currentIndex + 1) % days.length;
     onDayChange(newIndex);
   };
+
 
   return (
     <Carousel className="md:w-1/2 w-full">
@@ -68,11 +73,11 @@ export function HistoryCarousel({
               >
                 <div className="flex justify-between items-start gap-8">
                   <div className="flex-shrink-0 w-48">
-                    <Image
-                      src={avocado}
+                  <img
+                      src={`https://${gatewayUrl}/ipfs/${item.image}`}
                       alt={item.name}
                       width={800}
-                      className="w-full h-auto"
+                      height={800}
                     />
                   </div>
                   <div className="flex-1">

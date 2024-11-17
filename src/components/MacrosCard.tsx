@@ -1,4 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 type MacroType = "protein" | "carbs" | "fat" | "calories";
 
@@ -9,6 +10,8 @@ interface MacrosCardProps {
   goals?: number;
 }
 
+
+
 export const MacrosCard = ({
   type,
   value = 0,
@@ -16,6 +19,7 @@ export const MacrosCard = ({
   goals = 0,
 }: MacrosCardProps) => {
   const getMacroInfo = (type: MacroType) => {
+
     const info = {
       protein: {
         title: "Protein",
