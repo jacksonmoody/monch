@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 type MacroType = "protein" | "carbs" | "fat" | "calories";
@@ -6,7 +5,7 @@ type MacroType = "protein" | "carbs" | "fat" | "calories";
 interface MacrosCardProps {
   type: MacroType;
   value?: number;
-  unit?: "g" | "oz" | "%";
+  unit?: string;
   goals?: number;
 }
 
@@ -34,28 +33,25 @@ export const MacrosCard = ({
         title: "Calories",
         color: "text-red-600",
       },
-
     };
     return info[type];
   };
 
-
-
   const macroInfo = getMacroInfo(type);
 
   return (
-    <Card className="w-64">
+    <Card className={`w-64 ${value >= goals && "bg-green-200"}`}>
       <CardHeader>
         <CardTitle className={`text-xl font-bold ${macroInfo.color}`}>
           {macroInfo.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="text-3xl font-bold mb-2">
-          {value}
-          /
-          {goals}
-          {unit}
+        <div className="flex items-center gap-2">
+          <div className="text-3xl font-bold">{value}</div>
+          <div className="text-2xl text-gray-600">
+            / {goals} {unit}
+          </div>
         </div>
       </CardContent>
     </Card>
