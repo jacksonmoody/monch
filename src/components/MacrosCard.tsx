@@ -40,7 +40,7 @@ export const MacrosCard = ({
   const macroInfo = getMacroInfo(type);
 
   return (
-    <Card className={`w-64 ${value >= goals && "bg-green-200"}`}>
+    <Card className={`w-full md:w-64 ${value >= goals && "bg-green-200"}`}>
       <CardHeader>
         <CardTitle className={`text-xl font-bold ${macroInfo.color}`}>
           {macroInfo.title}

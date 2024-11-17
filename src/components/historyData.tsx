@@ -55,7 +55,9 @@ export function HistoryCarousel({
     <Carousel className="md:w-1/2 w-full">
       <CarouselContent>
         <CarouselItem key={currentDay}>
-          <h1 className={`text-4xl my-4 ${titan.className}`}>
+          <h1
+            className={`text-4xl my-8 md:my-4 ${titan.className} text-center md:text-left`}
+          >
             {currentDay} Meals
           </h1>
           <div className="space-y-4">

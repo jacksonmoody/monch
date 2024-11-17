@@ -60,22 +60,22 @@ export default async function Page() {
     <>
       <header className="bg-dark px-4 py-2 flex w-full items-center justify-between mb-5">
         <div
-          className={`flex text-7xl text-light relative -top-1 ${titan.className}`}
+          className={`flex md:text-7xl text-light relative -top-1 ${titan.className}`}
         >
           <Image
             src={avocado}
             alt="Avocado"
             width="500"
-            className="absolute left-16 top-2 w-16"
+            className="absolute left-4 md:left-16 top-1 md:top-2 w-4 md:w-16"
           />
           <h1>M</h1>
-          <div className="w-16" />
+          <div className="w-5 md:w-16" />
           <h1 className="tracking-widest">NCH</h1>
         </div>
         <Button
           asChild
           size="lg"
-          className={`text-white text-2xl uppercase ${titan.className}`}
+          className={`text-white md:text-2xl uppercase ${titan.className}`}
         >
           <SignOutButton />
         </Button>

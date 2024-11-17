@@ -49,7 +49,7 @@ export async function helper_post(userId: string, IpfsHash: string) {
           calories: data.calories,
           protein: data.protein,
           carbs: data.carbs,
-          fat: data.fat,
+          fat: data.fats,
           image: IpfsHash,
         },
       ];
@@ -62,7 +62,7 @@ export async function helper_post(userId: string, IpfsHash: string) {
             calories: data.calories,
             protein: data.protein,
             carbs: data.carbs,
-            fat: data.fat,
+            fat: data.fats,
             image: IpfsHash,
           },
         ];
@@ -72,7 +72,7 @@ export async function helper_post(userId: string, IpfsHash: string) {
           calories: data.calories,
           protein: data.protein,
           carbs: data.carbs,
-          fat: data.fat,
+          fat: data.fats,
           image: IpfsHash,
         });
       }
