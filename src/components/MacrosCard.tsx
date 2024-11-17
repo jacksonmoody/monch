@@ -48,7 +48,9 @@ export const MacrosCard = ({
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-2">
-          <div className="text-3xl font-bold">{Math.round(value)}</div>
+          <div className="text-3xl font-bold">
+            {value ? Math.round(value) : "0"}
+          </div>
           <div className="text-2xl text-gray-600">
             / {goals} {unit}
           </div>

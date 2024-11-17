@@ -82,19 +82,19 @@ export function HistoryCarousel({
                         <span className="text-blue-600 font-semibold">
                           Protein:
                         </span>
-                        <span>{item.protein}g</span>
+                        <span>{item.protein ? item.protein : 0} g</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-green-600 font-semibold">
                           Carbs:
                         </span>
-                        <span>{item.carbs}g</span>
+                        <span>{item.carbs ? item.carbs : 0} g</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-yellow-600 font-semibold">
                           Fats:
                         </span>
-                        <span>{item.fat}g</span>
+                        <span>{item.fat ? item.fat : 0} g</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-red-600 font-semibold">
