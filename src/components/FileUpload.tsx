@@ -5,11 +5,11 @@ import { Button } from "./ui/button";
 
 export default function FileUpload({ userId }: { userId: string }) {
   const [uploading, setUploading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const uploadFile = async (file: File | undefined) => {
     try {
       if (!file) {
-        alert("No file selected");
         return;
       }
 
@@ -23,10 +23,10 @@ export default function FileUpload({ userId }: { userId: string }) {
       });
       await uploadRequest.json();
       setUploading(false);
+      setSuccess(true);
     } catch (e) {
       console.log(e);
       setUploading(false);
-      alert("Trouble uploading file");
     }
   };
 
@@ -49,7 +49,7 @@ export default function FileUpload({ userId }: { userId: string }) {
           disabled={uploading}
           className="pointer-events-none text-white text-2xl font-bold py-2"
         >
-          {uploading ? "Processing..." : "Add New Meal"}
+          {uploading ? "Uploading..." : success ? "Uploaded!" : "Scan Meal"}
         </Button>
       </label>
     </>

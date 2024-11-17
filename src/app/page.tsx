@@ -1,7 +1,6 @@
 "use server";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { MacrosCard } from "@/components/MacrosCard";
 import Image from "next/image";
 import avocado from "@/app/images/avocado.png";
 import { titan } from "@/app/fonts";
@@ -9,9 +8,8 @@ import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@clerk/nextjs";
 import { pinata } from "@/lib/config";
 import FileUpload from "@/components/FileUpload";
-import { NextResponse, type NextRequest } from "next/server";
-import { HistoryCarousel, type HistoryData } from "../components/historyData";
-import  Dashboard  from "../components/Dashboard";
+import { type HistoryData, type GoalsData } from "../components/historyData";
+import Dashboard from "../components/Dashboard";
 
 const getFile = async (userId: string, filename: string) => {
   try {
@@ -53,6 +51,11 @@ export default async function Page() {
     "history.json"
   )) as unknown as HistoryData;
 
+  const goalsData = (await getFile(
+    userId,
+    "goals.json"
+  )) as unknown as GoalsData;
+
   return (
     <>
       <header className="bg-dark px-4 py-2 flex w-full items-center justify-between mb-5">
@@ -78,17 +81,14 @@ export default async function Page() {
         </Button>
       </header>
       <main className="flex flex-col items-center">
-  {/*
-  Dashboard Section - includes the macros cards and the history carousel
-  */}
-  <div className="w-full max-w-6xl mb-6">
-    <Dashboard historyData={historyData} />
-  </div>
-  <div className="w-full max-w-6xl flex justify-center">
-    <FileUpload userId={userId} />
-  </div>
-</main>
-      <footer className="absolute bottom-0 w-full">
+        <div className="w-full mb-6">
+          <Dashboard historyData={historyData} goalsData={goalsData} />
+        </div>
+        <div className="w-full max-w-6xl flex justify-center">
+          <FileUpload userId={userId} />
+        </div>
+      </main>
+      <footer className="mt-5 w-full">
         <p className="text-center text-gray-400 text-xs py-4">
           Made by Pedro Garcia, Jackson Moody, Josh Zhang, and Josh Zhang
         </p>

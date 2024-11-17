@@ -1,30 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { MacrosCard } from "@/components/MacrosCard";
-import { HistoryCarousel } from "@/components/historyData";
-
-interface FoodItem {
-  name: string;
-  image: string;
-  protein: number;
-  carbs: number;
-  fat: number;
-}
-
-interface HistoryData {
-  [key: string]: FoodItem[];
-}
+import {
+  type HistoryData,
+  type GoalsData,
+  HistoryCarousel,
+} from "@/components/historyData";
+import { titan } from "@/app/fonts";
+import WeeklyChart from "./WeeklyChart";
 
 interface DashboardProps {
   historyData: HistoryData;
+  goalsData: GoalsData;
 }
 
-export default function Dashboard({ historyData }: DashboardProps) {
+export default function Dashboard({ historyData, goalsData }: DashboardProps) {
+  if (!historyData || !goalsData) {
+    return null;
+  }
+
   const days = Object.keys(historyData);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const currentDay = days[currentIndex];
-  console.log("Current index:", currentIndex, "Current day:", currentDay);
 
   // Calculate total macros for the selected day
   const totalMacros = historyData[currentDay]?.reduce(
@@ -32,7 +30,7 @@ export default function Dashboard({ historyData }: DashboardProps) {
       totals.protein += item.protein;
       totals.carbs += item.carbs;
       totals.fat += item.fat;
-      totals.calories += item.protein * 4 + item.carbs * 4 + item.fat * 9;
+      totals.calories += item.calories;
       return totals;
     },
     { protein: 0, carbs: 0, fat: 0, calories: 0 }
@@ -40,31 +38,49 @@ export default function Dashboard({ historyData }: DashboardProps) {
 
   // Handler for changing the day
   const handleDayChange = (newIndex: number) => {
-    console.log("Changing to index:", newIndex);
     setCurrentIndex(newIndex);
   };
 
   return (
-    <div className="grid grid-cols-12 gap-4 max-w-6xl">
-      <div className="col-span-3">
-        <MacrosCard type="protein" value={totalMacros.protein} unit="g" goals={50} />
+    <div>
+      <h1 className={`text-4xl my-4 text-center ${titan.className}`}>
+        Macro Goals
+      </h1>
+      <div className="flex flex-wrap gap-2 w-full justify-center">
+        <MacrosCard
+          type="protein"
+          value={totalMacros.protein}
+          unit="g"
+          goals={goalsData.protein}
+        />
+        <MacrosCard
+          type="carbs"
+          value={totalMacros.carbs}
+          unit="g"
+          goals={goalsData.carbs}
+        />
+        <MacrosCard
+          type="fat"
+          value={totalMacros.fat}
+          unit="g"
+          goals={goalsData.fats}
+        />
+        <MacrosCard
+          type="calories"
+          value={totalMacros.calories}
+          unit="kcal"
+          goals={goalsData.calories}
+        />
       </div>
-      <div className="col-span-3">
-        <MacrosCard type="carbs" value={totalMacros.carbs} unit="g" goals={150} />
-      </div>
-      <div className="col-span-3">
-        <MacrosCard type="fat" value={totalMacros.fat} unit="g" goals={70} />
-      </div>
-      <div className="col-span-3">
-        <MacrosCard type="calories" value={totalMacros.calories} unit="g" goals={2000} />
-      </div>
-
-      <div className="col-span-12 flex w-full justify-center">
+      <div className="md:flex md:justify-around md:items-center">
         <HistoryCarousel
           data={historyData}
           currentIndex={currentIndex}
           onDayChange={handleDayChange}
         />
+        <div className="md:w-1/3 w-full h-[60vh]">
+          <WeeklyChart historyData={historyData} goalsData={goalsData} />
+        </div>
       </div>
     </div>
   );
