@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -7,6 +7,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Image from "next/image";
+import avocado from "@/app/images/avocado.png";
 
 interface FoodItem {
   name: string;
@@ -20,48 +22,90 @@ interface HistoryData {
   [key: string]: FoodItem[];
 }
 
-export function HistoryCarousel({ data }: { data: HistoryData }) {
+interface HistoryCarouselProps {
+  data: HistoryData;
+  onDayChange: (day: string) => void;
+}
+
+export function HistoryCarousel({ data, onDayChange }: HistoryCarouselProps) {
+  // State to track the current selected day
+  const [currentDayIndex, setCurrentDayIndex] = useState(0);
+  const days = Object.keys(data);
+
+  // Get the current day based on the index
+  const currentDay = days[currentDayIndex];
+
+  // Handler for navigating to the previous day
+  const handlePrevious = () => {
+    const newIndex = (currentDayIndex - 1 + days.length) % days.length;
+    setCurrentDayIndex(newIndex);
+    onDayChange(days[newIndex]);
+  };
+
+  // Handler for navigating to the next day
+  const handleNext = () => {
+    const newIndex = (currentDayIndex + 1) % days.length;
+    setCurrentDayIndex(newIndex);
+    onDayChange(days[newIndex]);
+  };
+
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-lg mx-auto">
       <Carousel className="w-full relative">
         <CarouselContent>
-          {Object.entries(data).map(([day, items]) => (
-            <CarouselItem key={day} className="pl-4">
-              <div className="p-6 w-full">
-                <h2 className="text-2xl font-bold mb-6 text-center">{day}</h2>
-                <div className="space-y-4">
-                  {items.map((item, index) => (
-                    <div
-                      key={`${day}-${index}`}
-                      className="flex flex-col gap-3 p-6 border rounded-lg shadow-md bg-white"
-                    >
-                      <h3 className="font-semibold text-xl">{item.name}</h3>
-                      <div className="grid grid-cols-3 gap-6 text-base">
-                        <div className="flex flex-col items-center p-2 bg-blue-50 rounded-lg">
-                          <span className="font-medium text-blue-600">Protein</span>
-                          <span>{item.protein}g</span>
-                        </div>
-                        <div className="flex flex-col items-center p-2 bg-green-50 rounded-lg">
-                          <span className="font-medium text-green-600">Carbs</span>
-                          <span>{item.carbs}g</span>
-                        </div>
-                        <div className="flex flex-col items-center p-2 bg-yellow-50 rounded-lg">
-                          <span className="font-medium text-yellow-600">Fat</span>
-                          <span>{item.fat}g</span>
+          <CarouselItem key={currentDay}>
+            <div className="w-full">
+              <h2 className="text-2xl font-bold mb-6 text-center">{currentDay}</h2>
+              <div className="space-y-4">
+                {data[currentDay].map((item, index) => (
+                  <div
+                    key={`${currentDay}-${index}`}
+                    className="bg-white rounded-lg shadow-md p-6"
+                  >
+                    <div className="flex justify-between items-start gap-8">
+                      <div className="flex-shrink-0 w-48">
+                        <Image
+                          src={avocado}
+                          alt="Avocado"
+                          width={800}
+                          className="w-full h-auto"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold mb-4">{item.name}</h3>
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-blue-600 font-semibold text-lg">Protein:</span>
+                            <span className="text-lg">{item.protein}g</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-green-600 font-semibold text-lg">Carbs:</span>
+                            <span className="text-lg">{item.carbs}g</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-yellow-600 font-semibold text-lg">Fats:</span>
+                            <span className="text-lg">{item.fat}g</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-red-600 font-semibold text-lg">Calories:</span>
+                            <span className="text-lg">
+                              {(item.protein * 4) + (item.carbs * 4) + (item.fat * 9)} kCal
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-            </CarouselItem>
-          ))}
+            </div>
+          </CarouselItem>
         </CarouselContent>
         <div className="absolute -left-4 top-1/2 -translate-y-1/2">
-          <CarouselPrevious />
+          <CarouselPrevious onClick={handlePrevious} />
         </div>
         <div className="absolute -right-4 top-1/2 -translate-y-1/2">
-          <CarouselNext />
+          <CarouselNext onClick={handleNext} />
         </div>
       </Carousel>
     </div>

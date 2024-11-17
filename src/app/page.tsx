@@ -11,13 +11,6 @@ import { SignOutButton } from "@clerk/nextjs";
 import { pinata } from "@/lib/config";
 import FileUpload from "@/components/FileUpload";
 import { NextResponse, type NextRequest } from "next/server";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import { HistoryCarousel } from "../components/historyData";
 
 
@@ -25,20 +18,10 @@ const getHistory = async (userId : string) => {
 
   try {
     console.log("Getting history");
+    console.log(userId);
     const response = await pinata.gateways.get("QmWtZSM1bGbpc1MWpN2ZSZFR4Cr9CemSmbqymyRDRb1Nby");
     const { data } = response;
     return NextResponse.json(data);
-
-    // const listedFilesByGroup = await pinata.listFiles().group(userId);
-    // const historyFile = listedFilesByGroup.find((f) => f.metadata.name === "history.json")?.ipfs_pin_hash;
-
-    // if (!historyFile) {
-    //   return NextResponse.json({ error: "History file not found" }, { status: 404 });
-    // }
-
-    // const files = await pinata.gateways.get(historyFile);
-    // console.log(files);
-    // return NextResponse.json(files);
   } catch (e) {
     console.error("API Error:", e);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -55,14 +38,6 @@ export default async function Page() {
 
   const myHistory = await getHistory(userId);
   const historyData = await myHistory.json();
-
-
-
-
-  // console.log(myHistory);
-
-  // const date = new Date().toISOString().substring(0,10);
-  // console.log(date);
 
   return (
     <>
@@ -88,22 +63,34 @@ export default async function Page() {
           <SignOutButton />
         </Button>
       </header>
+
       <main className="flex justify-center">
+        <div>
+        <p className="">Todays Goals:</p>
+        </div>
         <div className="grid grid-cols-12 gap-4 max-w-6xl">
-          <div className="col-span-4">
+
+          <div className="col-span-3">
+
             <MacrosCard type="protein" value={50} unit="g" />
           </div>
-          <div className="col-span-4">
+          <div className="col-span-3">
             <MacrosCard type="carbs" value={150} unit="g" />
           </div>
-          <div className="col-span-4">
+          <div className="col-span-3">
             <MacrosCard type="fat" value={30} unit="g" />
           </div>
+          <div className="col-span-3">
+            <MacrosCard type="calories" value={30} unit="g" />
+          </div>
+
+          {/* dont remove*/}
           <div className="col-span-12 flex w-full justify-center">
 
           <div className="col-span-12 flex w-full justify-center">
             {myHistory && <HistoryCarousel data={historyData} />}
           </div>
+
           </div>
           <div className="col-span-12 flex w-full justify-center">
             <FileUpload userId={userId} />
