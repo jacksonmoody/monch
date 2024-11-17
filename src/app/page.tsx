@@ -55,8 +55,8 @@ export default async function Page() {
           <div className="col-span-12">
             <HistoryTable />
           </div>
-          <div className="col-span-12">
-            <FileUpload />
+          <div className="col-span-12 flex w-full justify-center">
+            <FileUpload userId={userId} />
           </div>
         </div>
       </main>
