@@ -42,7 +42,6 @@ export function HistoryCarousel({
   const currentDay = days[currentIndex];
   const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URL;
 
-
   const handlePrevious = () => {
     const newIndex = (currentIndex - 1 + days.length) % days.length;
     onDayChange(newIndex);
@@ -52,7 +51,6 @@ export function HistoryCarousel({
     const newIndex = (currentIndex + 1) % days.length;
     onDayChange(newIndex);
   };
-
 
   return (
     <Carousel className="md:w-1/2 w-full">
@@ -69,15 +67,17 @@ export function HistoryCarousel({
               >
                 <div className="flex justify-between items-start gap-8">
                   <div className="flex-shrink-0 w-48">
-                  <img
-                      src={`https://${gatewayUrl}/ipfs/${item.image}`}
+                    <img
+                      src={`https://ipfs.io/ipfs/${item.image}`}
                       alt={item.name}
                       width={800}
                       height={800}
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-4">{item.name}</h3>
+                    <h3 className="text-xl font-bold mb-4 capitalize">
+                      {item.name}
+                    </h3>
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
                         <span className="text-blue-600 font-semibold">

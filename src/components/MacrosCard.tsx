@@ -9,8 +9,6 @@ interface MacrosCardProps {
   goals?: number;
 }
 
-
-
 export const MacrosCard = ({
   type,
   value = 0,
@@ -18,7 +16,6 @@ export const MacrosCard = ({
   goals = 0,
 }: MacrosCardProps) => {
   const getMacroInfo = (type: MacroType) => {
-
     const info = {
       protein: {
         title: "Protein",
@@ -51,7 +48,7 @@ export const MacrosCard = ({
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-2">
-          <div className="text-3xl font-bold">{value}</div>
+          <div className="text-3xl font-bold">{Math.round(value)}</div>
           <div className="text-2xl text-gray-600">
             / {goals} {unit}
           </div>
