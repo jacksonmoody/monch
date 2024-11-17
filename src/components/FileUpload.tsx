@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -25,7 +24,10 @@ export default function FileUpload({ userId }: { userId: string }) {
       await uploadRequest.json();
       setUploading(false);
       setSuccess(true);
-      window.location.reload();
+      setTimeout(() => {
+        setSuccess(false);
+        window.location.reload();
+      }, 2000);
     } catch (e) {
       console.log(e);
       setUploading(false);

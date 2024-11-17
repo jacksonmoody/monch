@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       cids: [uploadedFile.IpfsHash],
     });
 
-    await helper_post(userId ,uploadedFile.IpfsHash);
+    await helper_post(userId, uploadedFile.IpfsHash);
 
     return NextResponse.json({ status: 200 });
   } catch (e) {
