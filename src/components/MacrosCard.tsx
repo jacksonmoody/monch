@@ -7,12 +7,14 @@ interface MacrosCardProps {
   type: MacroType;
   value?: number;
   unit?: "g" | "oz" | "%";
+  goals?: number;
 }
 
 export const MacrosCard = ({
   type,
   value = 0,
   unit = "g",
+  goals = 0,
 }: MacrosCardProps) => {
   const getMacroInfo = (type: MacroType) => {
     const info = {
@@ -51,6 +53,8 @@ export const MacrosCard = ({
       <CardContent>
         <div className="text-3xl font-bold mb-2">
           {value}
+          /
+          {goals}
           {unit}
         </div>
       </CardContent>

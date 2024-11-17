@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@clerk/nextjs";
 import { pinata } from "@/lib/config";
 import FileUpload from "@/components/FileUpload";
+import { NextResponse, type NextRequest } from "next/server";
 import { HistoryCarousel, type HistoryData } from "../components/historyData";
+import  Dashboard  from "../components/Dashboard";
 
 const getFile = async (userId: string, filename: string) => {
   try {
@@ -75,29 +77,19 @@ export default async function Page() {
           <SignOutButton />
         </Button>
       </header>
-      <main className="flex justify-center">
-        <div className="grid grid-cols-12 gap-4 max-w-6xl">
-          <div className="col-span-4">
-            <MacrosCard type="protein" value={50} unit="g" />
-          </div>
-          <div className="col-span-4">
-            <MacrosCard type="carbs" value={150} unit="g" />
-          </div>
-          <div className="col-span-4">
-            <MacrosCard type="fat" value={30} unit="g" />
-          </div>
-          <div className="col-span-12 flex w-full justify-center">
-            <div className="col-span-12 flex w-full justify-center">
-              {historyData && <HistoryCarousel data={historyData} />}
-            </div>
-          </div>
-          <div className="col-span-12 flex w-full justify-center">
-            <FileUpload userId={userId} />
-          </div>
-        </div>
-      </main>
-      <footer className="w-full">
-        <p className="text-center text-gray-400 text-xs pb-4 pt-8">
+      <main className="flex flex-col items-center">
+  {/*
+  Dashboard Section - includes the macros cards and the history carousel
+  */}
+  <div className="w-full max-w-6xl mb-6">
+    <Dashboard historyData={historyData} />
+  </div>
+  <div className="w-full max-w-6xl flex justify-center">
+    <FileUpload userId={userId} />
+  </div>
+</main>
+      <footer className="absolute bottom-0 w-full">
+        <p className="text-center text-gray-400 text-xs py-4">
           Made by Pedro Garcia, Jackson Moody, Josh Zhang, and Josh Zhang
         </p>
       </footer>
