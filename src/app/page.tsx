@@ -1,3 +1,4 @@
+"use server";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import HistoryTable from "@/components/HistoryTable";
@@ -7,11 +8,40 @@ import avocado from "@/app/images/avocado.png";
 import { titan } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@clerk/nextjs";
+import { pinata } from "@/lib/config";
 import FileUpload from "@/components/FileUpload";
+import { NextResponse, type NextRequest } from "next/server";
+
+const getHistory = async () => {
+  
+  try {
+    const listedFilesByGroup = await pinata.listFiles().group("1234");
+    const historyFile = listedFilesByGroup.find((f) => f.metadata.name === "history.json")?.ipfs_pin_hash;
+
+    if (!historyFile) {
+      return NextResponse.json({ error: "History file not found" }, { status: 404 });
+    }
+
+    const files = await pinata.listFiles();
+    return NextResponse.json(files);
+  } catch (e) {
+    console.error("API Error:", e);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+};
 
 export default async function Page() {
   const { userId } = await auth();
   const user = await currentUser();
+
+
+  const date = new Date().toISOString().substring(0,10);
+  console.log(date);
+
+  console.log("Fetching history from /api/files");
+  const myHistory = await getHistory();
+  console.log("Fetched history:", myHistory);
+
 
   if (!userId || !user) {
     return redirect("/landing");
