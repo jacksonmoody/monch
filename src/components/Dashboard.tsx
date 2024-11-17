@@ -20,23 +20,28 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ historyData }: DashboardProps) {
-  const days = Object.keys(historyData);
+  const days = Object.keys(historyData || {});
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const currentDay = days[currentIndex];
+  const currentDay = days[currentIndex] || 0;
   console.log("Current index:", currentIndex, "Current day:", currentDay);
+  let totalMacros = { protein: 0, carbs: 0, fat: 0, calories: 0 };
 
   // Calculate total macros for the selected day
-  const totalMacros = historyData[currentDay]?.reduce(
+  if (currentDay && historyData[currentDay].length > 0) {
+  totalMacros = historyData[currentDay ].reduce(
     (totals, item) => {
-      totals.protein += item.protein;
-      totals.carbs += item.carbs;
-      totals.fat += item.fat;
-      totals.calories += item.protein * 4 + item.carbs * 4 + item.fat * 9;
+      totals.protein += item?.protein || 0;
+      totals.carbs += item?.carbs || 0;
+      totals.fat += item?.fat || 0;
+      totals.calories += (item?.protein || 0) * 4 + (item?.carbs || 0) * 4 + (item?.fat || 0) * 9;
       return totals;
     },
     { protein: 0, carbs: 0, fat: 0, calories: 0 }
   );
+  } else {
+    totalMacros = { protein: 0, carbs: 0, fat: 0, calories: 0 };
+  }
 
   // Handler for changing the day
   const handleDayChange = (newIndex: number) => {

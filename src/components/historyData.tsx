@@ -27,7 +27,7 @@ interface HistoryCarouselProps {
 }
 
 export function HistoryCarousel({ data, currentIndex, onDayChange }: HistoryCarouselProps) {
-  const days = Object.keys(data);
+  const days = Object.keys(data || {});
   const currentDay = days[currentIndex];
 
   console.log("Rendering day:", currentDay, "with index:", currentIndex);
@@ -52,7 +52,7 @@ export function HistoryCarousel({ data, currentIndex, onDayChange }: HistoryCaro
             <div className="w-full">
               <h2 className="text-2xl font-bold mb-6 text-center">{currentDay}</h2>
               <div className="space-y-4">
-                {data[currentDay]?.map((item, index) => (
+                {currentDay && data[currentDay]?.map((item, index) => (
                   <div
                     key={`${currentDay}-${index}`}
                     className="bg-white rounded-lg shadow-md p-6"

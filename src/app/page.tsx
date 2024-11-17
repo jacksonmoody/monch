@@ -13,6 +13,14 @@ import { NextResponse, type NextRequest } from "next/server";
 import { HistoryCarousel, type HistoryData } from "../components/historyData";
 import  Dashboard  from "../components/Dashboard";
 
+interface FoodItem {
+  name: string;
+  image: string;
+  protein: number;
+  carbs: number;
+  fat: number;
+}
+
 const getFile = async (userId: string, filename: string) => {
   try {
     const groupForUser = await pinata.groups.list().name(userId);
@@ -48,7 +56,7 @@ export default async function Page() {
     return redirect("/onboarding");
   }
 
-  const historyData = (await getFile(
+  let historyData = (await getFile(
     userId,
     "history.json"
   )) as unknown as HistoryData;
