@@ -40,7 +40,6 @@ export function HistoryCarousel({
 }: HistoryCarouselProps) {
   const days = Object.keys(data);
   const currentDay = days[currentIndex];
-  const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URL;
 
   const handlePrevious = () => {
     const newIndex = (currentIndex - 1 + days.length) % days.length;
