@@ -4,12 +4,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import Image from "next/image";
-import avocado from "@/app/images/avocado.png";
-import { pinata } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { titan } from "@/app/fonts";
-import { useEffect, useState } from "react";
 
 interface FoodItem {
   name: string;

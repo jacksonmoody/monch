@@ -1,5 +1,4 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useEffect, useState } from "react";
 
 type MacroType = "protein" | "carbs" | "fat" | "calories";
 
