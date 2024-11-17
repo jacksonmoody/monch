@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "./ui/button";
 
 export default function FileUpload() {
-  const [file, setFile] = useState<File>();
   const [uploading, setUploading] = useState(false);
 
-  const uploadFile = async () => {
+  const uploadFile = async (file: File | undefined) => {
     try {
       if (!file) {
         alert("No file selected");
@@ -30,15 +30,23 @@ export default function FileUpload() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(e.target?.files?.[0]);
+    uploadFile(e.target?.files?.[0]);
   };
 
   return (
-    <main className="w-full min-h-screen m-auto flex flex-col justify-center items-center">
-      <input type="file" onChange={handleChange} accept="image/*" />
-      <button type="button" disabled={uploading} onClick={uploadFile}>
-        {uploading ? "Uploading..." : "Upload"}
-      </button>
-    </main>
+    <>
+      <input
+        id="upload"
+        type="file"
+        onChange={handleChange}
+        accept="image/*"
+        hidden
+      />
+      <label htmlFor="upload" className="cursor-pointer w-full h-full">
+        <Button size="lg" disabled={uploading} className="pointer-events-none">
+          {uploading ? "Processing..." : "Add New Meal"}
+        </Button>
+      </label>
+    </>
   );
 }
