@@ -63,6 +63,9 @@ export default async function Page() {
 
   // const date = new Date().toISOString().substring(0,10);
   // console.log(date);
+  if (!user.publicMetadata?.isOnboarded) {
+    return redirect("/onboarding");
+  }
 
   return (
     <>
